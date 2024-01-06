@@ -6,7 +6,7 @@
 
 SharedMemory::SharedMemory() : shm(), region()
 {
-    bip::shared_memory_object::remove(shared_memory_name);
+    // bip::shared_memory_object::remove(shared_memory_name);
 }
 
 SharedMemory::~SharedMemory()
@@ -37,11 +37,20 @@ bool SharedMemory::Connect()
     try
     {
         shm = bip::shared_memory_object(bip::open_only, shared_memory_name, bip::read_write);
+    }
+    catch(const bip::interprocess_exception& ex)
+    {
+        std::cout << "shared_memory_object error: " << ex.what() << std::endl;
+        return false;
+    }
+
+    try
+    {
         region = bip::mapped_region(shm, bip::read_write);
     }
     catch(const bip::interprocess_exception& ex)
     {
-        std::cout << ex.what() << std::endl;
+        std::cout << "mapped_region error: " << ex.what() << std::endl;
         return false;
     }
     return true;

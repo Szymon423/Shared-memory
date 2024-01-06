@@ -3,7 +3,7 @@
 #include <boost/interprocess/mapped_region.hpp>
 #include <boost/interprocess/shared_memory_object.hpp>
 
-#define shared_memory_name "sharedmemory"
+#define shared_memory_name "MySharedMemory"
 
 namespace bip = boost::interprocess;
 
