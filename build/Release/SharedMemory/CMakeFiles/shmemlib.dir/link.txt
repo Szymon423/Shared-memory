@@ -1,0 +1,2 @@
+/usr/bin/ar qc libshmemlib.a CMakeFiles/shmemlib.dir/src/sharedMemory.cpp.o
+/usr/bin/ranlib libshmemlib.a
