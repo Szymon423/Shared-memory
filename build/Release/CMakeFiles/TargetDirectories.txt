@@ -1,6 +1,0 @@
-/mnt/c/Users/szymo/Projects/Shared-memory/build/Release/CMakeFiles/shmem.dir
-/mnt/c/Users/szymo/Projects/Shared-memory/build/Release/CMakeFiles/edit_cache.dir
-/mnt/c/Users/szymo/Projects/Shared-memory/build/Release/CMakeFiles/rebuild_cache.dir
-/mnt/c/Users/szymo/Projects/Shared-memory/build/Release/SharedMemory/CMakeFiles/shmemlib.dir
-/mnt/c/Users/szymo/Projects/Shared-memory/build/Release/SharedMemory/CMakeFiles/edit_cache.dir
-/mnt/c/Users/szymo/Projects/Shared-memory/build/Release/SharedMemory/CMakeFiles/rebuild_cache.dir
