@@ -3,7 +3,7 @@
 #include <boost/interprocess/mapped_region.hpp>
 #include <boost/interprocess/shared_memory_object.hpp>
 
-#define shared_memory_name "MySharedMemory"
+#define SHMEM_NAME "MySharedMemory"
 
 namespace bip = boost::interprocess;
 
@@ -23,15 +23,17 @@ enum class Action
 class SharedMemory
 {
 private:
-    Data* pData;
-    bip::shared_memory_object shm;
-    bip::mapped_region region;
+    static bip::shared_memory_object shm;
+    static bip::mapped_region region;
 
 public:
-    SharedMemory();
-    ~SharedMemory();
-    
-    bool Create();
-    bool Connect();
-    Data* GetSharedMemory();
+    SharedMemory() = delete;
+    ~SharedMemory() = delete;
+    SharedMemory(SharedMemory&) = delete;
+    SharedMemory(SharedMemory&&) = delete;
+
+    static void* CreateAndGet(size_t size);
+    static void* ConnectAndGet();
+    static void NullOut();
+    static void Close();
 };

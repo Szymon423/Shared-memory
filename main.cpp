@@ -17,15 +17,12 @@ int main(int argc, char **argv)
 
     if (action == Action::CREATE)
     {
-        std::cout << "Trying to create shared memory: " << shared_memory_name << std::endl;
-        SharedMemory shmem1;
-        if (!shmem1.Create())
-        {
-            std::cout << "Can't create shared memory: " << shared_memory_name << std::endl;
-            return 0;
-        }
+        std::cout << "Trying to create shared memory: " << SHMEM_NAME << std::endl;
+        
+        auto pData = static_cast<Data*>(SharedMemory::CreateAndGet(sizeof(Data)));
+        if (pData == nullptr) return 0;
+
         std::cout << "Created shared memory" << std::endl;
-        auto pData = shmem1.GetSharedMemory();
 
         pData->id = 5;
         pData->name[0] = 'c';
@@ -39,19 +36,14 @@ int main(int argc, char **argv)
             std::cout << " ." << std::flush;
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
-        std::cout << std::endl << "Closing shared memory: " << shared_memory_name << std::endl;
-
+        std::cout << std::endl << "Closing shared memory: " << SHMEM_NAME << std::endl;
+        SharedMemory::Close();
     }
     else if (action == Action::CONNECT)
     {
-        std::cout << "Trying to connect to shared memory: " << shared_memory_name << std::endl;
-        SharedMemory shmem2;
-         if (!shmem2.Connect())
-        {
-            std::cout << "Can't connect to sharedmemory: " << shared_memory_name << std::endl;
-            return 0;
-        }
-        auto pData = shmem2.GetSharedMemory();
+        std::cout << "Trying to connect to shared memory: " << SHMEM_NAME << std::endl;
+        auto pData = static_cast<Data*>(SharedMemory::ConnectAndGet());
+        if (pData == nullptr) return 0;
         std::cout << "Read from shmm: " << pData->id << " " << pData->name << std::endl;
     }
     return 0;

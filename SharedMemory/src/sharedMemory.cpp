@@ -4,59 +4,48 @@
 #include <boost/interprocess/shared_memory_object.hpp>
 
 
-SharedMemory::SharedMemory() : shm(), region()
-{
-    // bip::shared_memory_object::remove(shared_memory_name);
-}
+bip::shared_memory_object SharedMemory::shm;
+bip::mapped_region SharedMemory::region;
 
-SharedMemory::~SharedMemory()
-{
-    bip::shared_memory_object::remove(shared_memory_name);
-}
-
-bool SharedMemory::Create()
+void* SharedMemory::CreateAndGet(size_t size)
 {
     try
     {
-        shm = bip::shared_memory_object(bip::create_only, shared_memory_name, bip::read_write);
-        shm.truncate(sizeof(Data));
+        shm = bip::shared_memory_object(bip::create_only, SHMEM_NAME, bip::read_write);
+        shm.truncate(size);
         region = bip::mapped_region(shm, bip::read_write);
     }
     catch(const bip::interprocess_exception& ex)
     {
         std::cout << ex.what() << std::endl;
-        return false;
+        return nullptr;
     }
-    std::memset(region.get_address(), '\0', region.get_size());
+    NullOut();  
 
-    return true;
+    return region.get_address();
 }
 
-bool SharedMemory::Connect()
+void* SharedMemory::ConnectAndGet()
 {
     try
     {
-        shm = bip::shared_memory_object(bip::open_only, shared_memory_name, bip::read_write);
-    }
-    catch(const bip::interprocess_exception& ex)
-    {
-        std::cout << "shared_memory_object error: " << ex.what() << std::endl;
-        return false;
-    }
-
-    try
-    {
+        shm = bip::shared_memory_object(bip::open_only, SHMEM_NAME, bip::read_write);
         region = bip::mapped_region(shm, bip::read_write);
     }
-    catch(const bip::interprocess_exception& ex)
+    catch (const bip::interprocess_exception& ex)
     {
-        std::cout << "mapped_region error: " << ex.what() << std::endl;
-        return false;
+        std::cout << ex.what() << std::endl;
+        return nullptr;
     }
-    return true;
+    return region.get_address();
 }
 
-Data* SharedMemory::GetSharedMemory()
+void SharedMemory::NullOut()
 {
-    return static_cast<Data*>(region.get_address());;
+    std::memset(region.get_address(), '\0', region.get_size());
+}
+
+void SharedMemory::Close()
+{
+    bip::shared_memory_object::remove(SHMEM_NAME);
 }
