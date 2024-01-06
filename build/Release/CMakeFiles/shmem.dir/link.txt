@@ -1,1 +1,0 @@
-/usr/bin/g++ -rdynamic CMakeFiles/shmem.dir/main.cpp.o -o shmem  SharedMemory/libshmemlib.a 
