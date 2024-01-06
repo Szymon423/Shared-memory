@@ -25,17 +25,21 @@ int main(int argc, char **argv)
         std::cout << "Created shared memory" << std::endl;
 
         pData->mtx.lock();
-        pData->id = 5;
+        pData->id = 123;
         pData->name[0] = 'c';
         pData->name[1] = 'h';
         pData->name[2] = 'u';
         pData->name[3] = 'j';
+        pData->name[4] = 'e';
         pData->mtx.unlock();
         std::cout << "Write to shmm: " << pData->id << " " << pData->name << std::endl;
         std::cout << "Waiting ";
         for (int i = 0; i < 20; i++) 
         {
             std::cout << " ." << std::flush;
+            pData->mtx.lock();
+            pData->id = i;
+            pData->mtx.unlock();
             std::this_thread::sleep_for(std::chrono::seconds(1));
         }
         std::cout << std::endl << "Closing shared memory: " << SHMEM_NAME << std::endl;

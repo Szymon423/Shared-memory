@@ -11,7 +11,7 @@ void* SharedMemory::CreateAndGet(size_t size)
 {
     try
     {
-        shm = bip::shared_memory_object(bip::create_only, SHMEM_NAME, bip::read_write);
+        shm = bip::shared_memory_object(bip::open_or_create, SHMEM_NAME, bip::read_write);
         shm.truncate(size);
         region = bip::mapped_region(shm, bip::read_write);
     }
