@@ -24,11 +24,13 @@ int main(int argc, char **argv)
 
         std::cout << "Created shared memory" << std::endl;
 
+        pData->mtx.lock();
         pData->id = 5;
         pData->name[0] = 'c';
         pData->name[1] = 'h';
         pData->name[2] = 'u';
         pData->name[3] = 'j';
+        pData->mtx.unlock();
         std::cout << "Write to shmm: " << pData->id << " " << pData->name << std::endl;
         std::cout << "Waiting ";
         for (int i = 0; i < 20; i++) 
@@ -44,7 +46,9 @@ int main(int argc, char **argv)
         std::cout << "Trying to connect to shared memory: " << SHMEM_NAME << std::endl;
         auto pData = static_cast<Data*>(SharedMemory::ConnectAndGet());
         if (pData == nullptr) return 0;
+        pData->mtx.lock();
         std::cout << "Read from shmm: " << pData->id << " " << pData->name << std::endl;
+        pData->mtx.unlock();
     }
     return 0;
 }

@@ -2,6 +2,7 @@
 
 #include <boost/interprocess/mapped_region.hpp>
 #include <boost/interprocess/shared_memory_object.hpp>
+#include <boost/interprocess/sync/interprocess_mutex.hpp>
 
 #define SHMEM_NAME "MySharedMemory"
 
@@ -11,6 +12,7 @@ struct Data
 {
     int id;
     char name[10];
+    bip::interprocess_mutex mtx;
 };
 
 enum class Action
